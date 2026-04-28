@@ -116,6 +116,40 @@ Instruction: {instruction}
 
 ---
 
+## Showcase
+
+Here's Vibe Sight in action on a real webpage — selecting an element, attaching an instruction, and generating the prompt:
+
+### Select & Annotate
+
+Click any element on the page. A green highlight locks the selection and a comment card appears where you type your instruction.
+
+![Selecting an element and adding an instruction](screenshots/ss1.png)
+
+### Generate & Copy
+
+Hit the "Generate Prompt" button. The token-optimized prompt is copied to your clipboard instantly with a confirmation toast.
+
+![Prompt copied to clipboard](screenshots/ss2.png)
+
+### Generated Output
+
+From the annotation above, this is what gets copied:
+
+```
+URL: https://openclaw.ai/
+---
+
+[EL1] span.title-main
+HTML: <span class="title-main">OpenClaw</span>
+Styles: font-weight:700; color:rgb(240, 244, 255)
+Instruction: Make this 30 percent bigger and change the font to a handwritten one
+```
+
+That's it — paste this into Cursor, Claude, or any AI coder and it has exactly the context it needs.
+
+---
+
 ## Example Output
 
 With the default settings, annotating two elements produces:
