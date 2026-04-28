@@ -1,6 +1,6 @@
 # Vibe Sight
 
-A Microsoft Edge extension for visual DOM annotation and AI prompt generation. Select elements on any webpage, attach instructions, and generate a token-optimized prompt ready to paste into your AI coder.
+Give your AI coder eyes. A visual DOM inspector that lets you click, comment, and snipe UI elements straight into copy-pasteable prompts for vibe coding.
 
 ![Vibe Sight](icons/icon128.png)
 
