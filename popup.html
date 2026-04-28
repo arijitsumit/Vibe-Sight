@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibe Sight</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      padding: 20px 16px 16px;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .status {
+      padding: 16px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .status-badge.active {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-badge.inactive {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-dot.active {
+      background: #10b981;
+      box-shadow: 0 0 0 2px #d1fae5;
+    }
+
+    .status-dot.inactive {
+      background: #9ca3af;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: #6366f1;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5855eb;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #374151;
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── Settings Panel ── */
+
+    .settings-toggle {
+      padding: 8px 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .settings-toggle-btn {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6366f1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+    }
+
+    .settings-toggle-btn:hover {
+      color: #5855eb;
+    }
+
+    .settings-arrow {
+      display: inline-block;
+      transition: transform 0.15s;
+      font-size: 10px;
+    }
+
+    .settings-arrow.open {
+      transform: rotate(90deg);
+    }
+
+    .settings-panel {
+      display: none;
+      padding: 0 16px 16px;
+    }
+
+    .settings-panel.open {
+      display: block;
+    }
+
+    .settings-section {
+      margin-bottom: 12px;
+    }
+
+    .settings-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .settings-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .settings-textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-family: inherit;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #1f2937;
+      background: white;
+      resize: vertical;
+      min-height: 48px;
+    }
+
+    .settings-textarea:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    }
+
+    .settings-textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .preset-btn {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      background: white;
+      color: #374151;
+      transition: background 0.1s, border-color 0.1s;
+    }
+
+    .preset-btn:hover {
+      background: #f3f4f6;
+    }
+
+    .preset-btn.active {
+      background: #eef2ff;
+      border-color: #6366f1;
+      color: #4f46e5;
+    }
+
+    .settings-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .settings-actions .btn {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-save {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background: #059669;
+    }
+
+    .btn-reset {
+      background: white;
+      color: #6b7280;
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn-reset:hover {
+      background: #f9fafb;
+    }
+
+    .saved-indicator {
+      font-size: 11px;
+      color: #10b981;
+      opacity: 0;
+      transition: opacity 0.2s;
+      margin-left: 4px;
+      align-self: center;
+    }
+
+    .saved-indicator.show {
+      opacity: 1;
+    }
+
+    .shortcut {
+      padding: 12px 16px;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+    }
+
+    .shortcut kbd {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      box-shadow: 0 1px 0 #d1d5db;
+    }
+
+    .shortcut span {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .format-help {
+      font-size: 10px;
+      color: #9ca3af;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .format-help code {
+      background: #f3f4f6;
+      padding: 1px 3px;
+      border-radius: 2px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 10px;
+    }
+
+    /* ── Hotkey Recorder ── */
+
+    .hotkey-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hotkey-input {
+      flex: 1;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      color: #1f2937;
+      background: white;
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .hotkey-input.recording {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+      color: #6366f1;
+    }
+
+    .hotkey-input .placeholder {
+      color: #9ca3af;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .hotkey-reset-btn {
+      background: none;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 11px;
+      color: #6b7280;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .hotkey-reset-btn:hover {
+      background: #f3f4f6;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>&#10024; Vibe Sight</h1>
+    <p>Visual DOM annotation for AI coding</p>
+  </div>
+
+  <div class="status">
+    <div class="status-badge inactive" id="statusBadge">
+      <span class="status-dot inactive" id="statusDot"></span>
+      <span id="statusText">Inactive</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="toggleBtn">
+        &#9654; Activate Selection Mode
+      </button>
+      <button class="btn btn-secondary" id="generateBtn" disabled>
+        &#10024; Generate &amp; Copy Prompt
+      </button>
+      <button class="btn btn-secondary" id="clearBtn" disabled>
+        &#128465; Clear All Annotations
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-toggle">
+    <button class="settings-toggle-btn" id="settingsToggleBtn">
+      <span class="settings-arrow" id="settingsArrow">&#9654;</span>
+      Prompt Settings
+    </button>
+  </div>
+
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-section">
+      <label class="settings-label">Presets</label>
+      <div class="presets">
+        <button class="preset-btn active" data-preset="default">General</button>
+        <button class="preset-btn" data-preset="tailwind">Tailwind</button>
+        <button class="preset-btn" data-preset="react">React</button>
+        <button class="preset-btn" data-preset="vue">Vue</button>
+        <button class="preset-btn" data-preset="custom">Custom</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <label class="settings-label" for="systemPrompt">System Prompt</label>
+      <textarea class="settings-textarea" id="systemPrompt" rows="3"
+        placeholder="e.g. Act as a Tailwind CSS expert. Only output code changes, no explanations."></textarea>
+    </div>
+
+    <div class="settings-section">
+      <label class="settings-label" for="elementFormat">Element Format</label>
+      <textarea class="settings-textarea" id="elementFormat" rows="3"></textarea>
+      <div class="format-help">
+        Placeholders: <code>{selector}</code> <code>{html}</code> <code>{styles}</code> <code>{instruction}</code>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <label class="settings-label">Keyboard Shortcut</label>
+      <div class="hotkey-row">
+        <div class="hotkey-input" id="hotkeyInput" tabindex="0">
+          <span class="placeholder">Click to record...</span>
+        </div>
+        <button class="hotkey-reset-btn" id="hotkeyResetBtn" title="Reset to default">Reset</button>
+      </div>
+    </div>
+
+    <div class="settings-actions">
+      <button class="btn btn-save" id="saveSettingsBtn">Save</button>
+      <button class="btn btn-reset" id="resetSettingsBtn">Reset</button>
+      <span class="saved-indicator" id="savedIndicator">Saved</span>
+    </div>
+  </div>
+
+  <div class="shortcut" id="shortcutFooter">
+    <span>Toggle with <kbd id="shortcutDisplay">Ctrl + \</kbd></span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+.tmp/
+*.tmp
+
+# Development tooling (not part of the extension)
+.opencode/
+
+# Source assets (not needed at runtime)
+icons/*.jpg
+icons/*.ps1
+icons/*.html
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Extension packaging
+*.crx
+*.pem
+*.zip
